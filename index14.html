@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Loja Online 2025</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+    header {
+      background-color: orange;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      margin: 0;
+    }
+    nav {
+      display: flex;
+      gap: 15px;
+    }
+    nav a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+    }
+    .menu {
+      position: relative;
+    }
+    .menu button {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .menu-options {
+      display: none;
+      position: absolute;
+      right: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+    }
+    .menu-options a {
+      display: block;
+      padding: 8px;
+      text-decoration: none;
+      color: black;
+    }
+    .menu-options a:hover {
+      background: #eee;
+    }
+    .search {
+      text-align: center;
+      margin: 20px;
+    }
+    .search input {
+      padding: 8px;
+      width: 50%;
+    }
+    .produtos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .produto {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      text-align: center;
+    }
+    .produto h3 {
+      margin: 10px 0;
+    }
+    .produto button {
+      margin-top: 10px;
+      padding: 8px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background-color: orange;
+      color: white;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🛒 Loja Online 2025</h1>
+    <nav>
+      <a href="#">Eletrônicos</a>
+      <a href="#">Acessórios</a>
+      <a href="#">Vestimenta</a>
+      <a href="#">Calçados</a>
+      <a href="#">Brinquedos</a>
+    </nav>
+    <div class="menu">
+      <button id="menuBtn">⋮</button>
+      <div class="menu-options" id="menuOptions">
+        <a href="#" onclick="abrirLogin()">Entrar em uma conta</a>
+        <a href="#" onclick="abrirCadastro()">Criar uma conta</a>
+        <a href="#">Lista de Desejos</a>
+        <a href="#">Sair da Conta</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="search">
+    <input type="text" id="pesquisa" placeholder="Pesquisar produtos..." onkeyup="pesquisar()">
+  </div>
+
+  <section class="produtos" id="listaProdutos">
+    <!-- Produtos gerados -->
+  </section>
+
+  <script>
+    const produtos = [
+      {nome: "Celular NeoTech X1 (2025)", preco: 3999, categoria: "Eletrônicos"},
+      {nome: "Notebook FutureBook Pro (2025)", preco: 6599, categoria: "Eletrônicos"},
+      {nome: "TV VisionMax 65'' (2025)", preco: 4999, categoria: "Eletrônicos"},
+      {nome: "Tablet SkyTab Ultra (2025)", preco: 2999, categoria: "Eletrônicos"},
+      {nome: "Teclado Gamer Blaze (2025)", preco: 399, categoria: "Acessórios"},
+      {nome: "Mouse Raptor RGB (2025)", preco: 199, categoria: "Acessórios"},
+      {nome: "Monitor CrystalView 27'' (2025)", preco: 1299, categoria: "Eletrônicos"},
+      {nome: "Capinha ColorFlex Azul (2025)", preco: 59, categoria: "Acessórios"},
+      {nome: "Carregador TurboVolt (2025)", preco: 149, categoria: "Acessórios"},
+      {nome: "Casaco UrbanStyle (2025)", preco: 299, categoria: "Vestimenta"},
+      {nome: "Calça Jeans PrimeFit (2025)", preco: 199, categoria: "Vestimenta"},
+      {nome: "Blusa SoftWear (2025)", preco: 129, categoria: "Vestimenta"},
+      {nome: "Camiseta StreetWear (2025)", preco: 89, categoria: "Vestimenta"},
+      {nome: "Short Casual Summer (2025)", preco: 99, categoria: "Vestimenta"},
+      {nome: "Sapato EleganceMax (2025)", preco: 349, categoria: "Calçados"},
+      {nome: "Chinela ComfortFeet (2025)", preco: 69, categoria: "Calçados"},
+      {nome: "Chuteira GoalPro (2025)", preco: 499, categoria: "Calçados"},
+      {nome: "Jordan FutureAir (2025)", preco: 1599, categoria: "Calçados"},
+      {nome: "Boneca DreamDoll (2025)", preco: 199, categoria: "Brinquedos"},
+      {nome: "Carrinho TurboCar (2025)", preco: 299, categoria: "Brinquedos"}
+    ];
+
+    const lista = document.getElementById("listaProdutos");
+    produtos.forEach(p => {
+      let div = document.createElement("div");
+      div.classList.add("produto");
+      div.innerHTML = `<h3>${p.nome}</h3><p>R$ ${p.preco}</p><button>Comprar</button>`;
+      lista.appendChild(div);
+    });
+
+    // Menu suspenso
+    document.getElementById("menuBtn").onclick = () => {
+      document.getElementById("menuOptions").classList.toggle("hidden");
+    };
+
+    // Pesquisa
+    function pesquisar(){
+      let input = document.getElementById("pesquisa").value.toLowerCase();
+      lista.innerHTML = "";
+      let encontrados = produtos.filter(p => p.nome.toLowerCase().includes(input));
+      if(encontrados.length === 0){
+        lista.innerHTML = `<p>Ops, lamento informa-lo(la), que esse produto não está nos nossos estoques! 😢</p>`;
+      } else {
+        encontrados.forEach(p => {
+          let div = document.createElement("div");
+          div.classList.add("produto");
+          div.innerHTML = `<h3>${p.nome}</h3><p>R$ ${p.preco}</p><button>Comprar</button>`;
+          lista.appendChild(div);
+        });
+      }
+    }
+  </script>
+</body>
+</html>
